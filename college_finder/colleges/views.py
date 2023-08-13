@@ -36,9 +36,10 @@ def predictor(student):
 
 def checker(user):	
 	profile = Profile.objects.get(user = user)
-	possible_colleges = predictor([[profile.gpa]])
+	possible_colleges = predictor([[profile.gpa,profile.percentage]])
 
 	college_list = []
+	print(college_list)
 
 	for college in possible_colleges:
 		college_details = College.objects.get(name = college)
@@ -99,7 +100,7 @@ def search(request):
 
 		return render(request, 'colleges/college_list.html', {'colleges_copy': colleges_copy})
 	return redirect('login')
-
+	return 
 
 def apply_to_college(request, pk):
     if request.method == 'POST':

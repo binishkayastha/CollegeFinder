@@ -52,12 +52,13 @@ def update(request):
 	if request.method == 'POST':
 
 		new_score = request.POST.get('score')
-		new_gpa = request.POST.get('gpa')
+		new_cgpa = request.POST.get('cgpa')
 
-		if (int)(new_score) > 340 or (int)(new_gpa) > 10:
+		if (int)(new_score) > 100 or (int)(new_cgpa) > 4:
 			return render(request, 'sign_in/update.html')
 
-		profile.gpa = new_gpa
+		profile.gre = new_score
+		profile.cgpa = new_cgpa
 		profile.save()
 		return redirect('sign_in:profile')
 	return render(request, 'sign_in/update.html')

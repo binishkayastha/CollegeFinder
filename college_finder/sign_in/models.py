@@ -6,7 +6,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Profile(models.Model):
 	user = models.ForeignKey(User, on_delete = models.CASCADE)
 	name = models.CharField(max_length = 100)
-	gpa = models.FloatField(validators = [MinValueValidator(0), MaxValueValidator(10)])
+	gpa = models.FloatField(validators = [MinValueValidator(0), MaxValueValidator(4)])
+	percentage = models.FloatField(validators = [MinValueValidator(0), MaxValueValidator(100)])
 
 
 	def __str__(self):
