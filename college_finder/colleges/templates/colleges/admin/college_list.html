@@ -1,4 +1,4 @@
-{% extends 'colleges/home.html' %}
+{% extends 'colleges/admin/home.html' %}
 
 {% block content %}
 
@@ -10,25 +10,33 @@
 </div>
 {% endif %}
 
+<style>
+	.buttons{
+		display: flex;
+		justify-content: space-around;
+		padding: 5px;
+	}
+</style>
+
 
 	<div class="row row-flex">
 	{% for college in colleges_copy %}			
-		<div class="content col-sm-8 col-md-8 col-lg-4">
-			<div class="card mx-5 my-5">
+		<div class="content col-sm-5 col-md-5 col-lg-4">
+			<div class="card mx-3 my-3">
 			  	<div class="card-body">
 				    <h5 class="card-title">{{ college.name }}</h5>
 				    <br>
 				    <h6 class="card-subtitle mb-2 text-muted">Location: {{ college.location }}</h6>				    
 				    <p class="card-text">Average Cost: {{ college.average_cost }} lakhs (2 years)</p>
-				    <br>
-			    	<a target="blank" href="{{ college.website }}" class="card-link">College Website</a>
-			  	</div>
-					{% if user.is_authenticated and not user.is_superuser %}
-  					<form method="post" action="{% url 'colleges:apply_to_college' pk=college.id %}">
-						{% csrf_token %}
-						<button type="submit" class="btn btn-primary apply-button">Apply</button>
-  					</form>
-					{% endif %}
+					<hr>
+			    	<a style="text-align: center;" target="blank" href="{{ college.website }}" class="card-link">College Website</a>
+					<hr>
+					<div class="buttons"> 
+						<a  href="{% url 'colleges:edit_college' college.id %}">Edit</a>
+						<a href="{% url 'colleges:delete_college' college.id %}">Delete</a>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	{% endfor %}															

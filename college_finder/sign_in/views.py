@@ -8,7 +8,10 @@ from django.contrib.auth.decorators import login_required
 
 def home(request):
 	if request.user.is_authenticated:
-		return redirect('colleges:search')
+		if request.user.is_superuser:
+			return redirect('colleges:colleges')
+		else:
+			return redirect('colleges:search')
 	return redirect('login/')
 
 def register(request):

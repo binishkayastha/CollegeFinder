@@ -1,0 +1,17 @@
+{% extends 'colleges/admin/home.html' %}
+
+<style>
+	.body{
+		margin-left: 200px;
+	}
+</style>
+
+{% block content %}
+<div class="body">
+	<form method="post">
+		{% csrf_token %}
+		{{ college_form.as_p }}
+		<button class="btn btn-primary" type="submit">Add College</button>
+	</div>
+	</form>
+{% endblock %}

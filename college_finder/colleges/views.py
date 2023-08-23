@@ -9,8 +9,15 @@ from .models import *
 from .forms import CollegeForm
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
+def colleges(request):
+	if request.user.is_authenticated and request.user.is_superuser:
+		colleges = College.objects.all()
+		context = {'colleges_copy': colleges}
+		return render(request, "colleges/admin/college_list.html",context)
+	return redirect('login/')
 
 def predictor(student):
 	to_test = student
@@ -33,7 +40,6 @@ def predictor(student):
 			colleges.append(name)
 	return colleges
 
-
 def checker(user):	
 	profile = Profile.objects.get(user = user)
 	possible_colleges = predictor([[profile.gpa,profile.percentage]])
@@ -47,7 +53,7 @@ def checker(user):
 
 	return college_list
 
-
+@login_required(login_url='login')
 def add_college(request):
 	if request.user.is_authenticated and request.user.is_superuser:
 		if request.method == "POST":
@@ -55,10 +61,35 @@ def add_college(request):
 
 			if college_form.is_valid():
 				college_form.save()
-				return redirect('colleges:add')
+				return redirect('colleges:colleges')
 		else:
 			college_form = CollegeForm()
-		return render(request, 'colleges/add.html', {'college_form': college_form})
+		return render(request, 'colleges/admin/add.html', {'college_form': college_form})
+
+@login_required(login_url='login')
+def edit_college(request, pk):
+    college = College.objects.get(id=pk)
+    form = CollegeForm(instance=college)
+    
+    if request.method == "POST":
+        form = CollegeForm(request.POST, instance=college)
+        if form.is_valid():
+            college = form.save()  
+            messages.success(request, 'College information updated successfully')
+            return redirect('colleges:colleges')  
+    context = {'form': form}
+    return render(request, 'colleges/admin/edit_college.html', context)
+
+@login_required(login_url='login')
+def delete_college(request, pk):
+    college = College.objects.get(id=pk)
+    if request.method == "POST":
+        college.delete()
+        messages.danger(request, 'College deleted successfully')
+        return redirect('colleges:colleges')
+    return render(request, 'colleges/admin/delete_college.html', {"obj": college})
+
+
 
 def search(request):
 	print('in search')
@@ -101,6 +132,7 @@ def search(request):
 		return render(request, 'colleges/college_list.html', {'colleges_copy': colleges_copy})
 	return redirect('login')
 	return 
+
 
 def apply_to_college(request, pk):
     if request.method == 'POST':

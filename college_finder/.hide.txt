@@ -1,0 +1,2 @@
+- making a crud list
+- search bar on admin
