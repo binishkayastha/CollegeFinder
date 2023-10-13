@@ -7,6 +7,7 @@ class College(models.Model):
     location = models.CharField(max_length=70)
     website = models.CharField(max_length=1000)
     image = models.ImageField(null=True, blank=True)
+    form_link = models.CharField(max_length=1000,blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 

@@ -10,8 +10,7 @@ def home(request):
 	if request.user.is_authenticated:
 		if request.user.is_superuser:
 			return redirect('colleges:colleges')
-		else:
-			return redirect('colleges:search')
+		return redirect('colleges:search')
 	return redirect('login/')
 
 def register(request):

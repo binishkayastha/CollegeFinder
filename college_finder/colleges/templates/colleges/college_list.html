@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{% load static %}
+
 {% if messages %}
 <div class="messages">
 	{% for message in messages %}
@@ -19,16 +21,25 @@
 				    <h5 class="card-title">{{ college.name }}</h5>
 				    <br>
 				    <h6 class="card-subtitle mb-2 text-muted">Location: {{ college.location }}</h6>				    
-				    <p class="card-text">Average Cost: {{ college.average_cost }} lakhs (2 years)</p>
+				    <p class="card-text">Average Cost: {{ college.average_cost }} lakhs (4 years)</p>
 				    <br>
-			    	<a target="blank" href="{{ college.website }}" class="card-link">College Website</a>
-			  	</div>
-					{% if user.is_authenticated and not user.is_superuser %}
-  					<form method="post" action="{% url 'colleges:apply_to_college' pk=college.id %}">
-						{% csrf_token %}
-						<button type="submit" class="btn btn-primary apply-button">Apply</button>
-  					</form>
-					{% endif %}
+
+			    	<a class="card-link" target="_blank" href="{{ college.website }}">View About College</a>
+					
+				</div>
+				<!--For Admin -->
+				{% if user.is_authenticated and user.is_superuser %}
+					<div class="buttons"> 
+						<a  href="{% url 'colleges:edit_college' college.id %}">Edit</a>
+						<a href="{% url 'colleges:delete_college' college.id %}">Delete</a>
+					</div>
+				<!-- for User  -->
+				{% else  %}
+				<a href="{% url 'colleges:apply_to_college' college.id %}">
+					<button type="submit" class="btn btn-primary apply-button">Apply Application Form</button>
+				</a>
+				{% endif %}
+				
 			</div>
 		</div>
 	{% endfor %}															

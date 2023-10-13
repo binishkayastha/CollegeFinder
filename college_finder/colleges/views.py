@@ -16,7 +16,7 @@ def colleges(request):
 	if request.user.is_authenticated and request.user.is_superuser:
 		colleges = College.objects.all()
 		context = {'colleges_copy': colleges}
-		return render(request, "colleges/admin/college_list.html",context)
+		return render(request, "colleges/college_list.html",context)
 	return redirect('login/')
 
 def predictor(student):
@@ -64,7 +64,7 @@ def add_college(request):
 				return redirect('colleges:colleges')
 		else:
 			college_form = CollegeForm()
-		return render(request, 'colleges/admin/add.html', {'college_form': college_form})
+		return render(request, 'colleges/add_college.html', {'college_form': college_form})
 
 @login_required(login_url='login')
 def edit_college(request, pk):
@@ -78,7 +78,7 @@ def edit_college(request, pk):
             messages.success(request, 'College information updated successfully')
             return redirect('colleges:colleges')  
     context = {'form': form}
-    return render(request, 'colleges/admin/edit_college.html', context)
+    return render(request, 'colleges/edit_college.html', context)
 
 @login_required(login_url='login')
 def delete_college(request, pk):
@@ -87,9 +87,7 @@ def delete_college(request, pk):
         college.delete()
         messages.danger(request, 'College deleted successfully')
         return redirect('colleges:colleges')
-    return render(request, 'colleges/admin/delete_college.html', {"obj": college})
-
-
+    return render(request, 'colleges/delete_college.html', {"obj": college})
 
 def search(request):
 	print('in search')
@@ -104,7 +102,8 @@ def search(request):
 		
 		maxCost = request.POST.get('maxRange')
 		location = request.POST.get('location')
-		print(maxCost, location)
+		print(f"maxCost & Location {maxCost, location}")
+		
 		if maxCost is None and location is None:
 			colleges_copy = colleges
 
@@ -133,19 +132,11 @@ def search(request):
 	return redirect('login')
 	return 
 
-
 def apply_to_college(request, pk):
-    if request.method == 'POST':
-        college_id = pk
-        try:
-            college = College.objects.get(id=college_id)
-        except College.DoesNotExist:
-            return JsonResponse({'message': 'College not found'}, status=400)
-        
-        application = Apply.objects.create(college=college, student=request.user)
-        application.save()
-        
-        messages.success(request, 'Application successful')
-        return redirect(reverse('colleges:search'))
-    else:
-        return redirect(reverse('colleges:search'))
+	college = College.objects.get(id=pk)
+	frame_link = college.form_link
+
+	print(frame_link)
+
+	context = {"frame_link": frame_link}
+	return render(request,'colleges/apply_form.html', context)

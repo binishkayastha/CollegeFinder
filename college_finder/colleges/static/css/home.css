@@ -44,7 +44,9 @@ a, a:hover, a:focus {
 }
 
 .card-link {
-    color: blue;
+    color: var(--teal);
+    text-align: center;
+    margin-left: 30px;
 }
 
 .card {
@@ -130,6 +132,11 @@ a[data-toggle="collapse"] {
     position: relative;
 }
 
+.buttons{
+    display: flex;
+    justify-content: space-around;
+}
+
 .dropdown-toggle::after {
     display: block;
     position: absolute;
@@ -152,6 +159,10 @@ a[data-toggle="collapse"] {
   margin: 10px;
   border: 2px solid #fff;
   color: black;
+}
+
+.apply-button{
+    margin-left: 40px;
 }
 
 @media (max-width: 768px) {
