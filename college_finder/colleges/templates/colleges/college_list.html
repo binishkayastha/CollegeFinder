@@ -30,7 +30,6 @@
 				<!--For Admin -->
 				{% if user.is_authenticated and user.is_superuser %}
 					<div class="buttons"> 
-						<a  href="{% url 'colleges:edit_college' college.id %}">Edit</a>
 						<a href="{% url 'colleges:delete_college' college.id %}">Delete</a>
 					</div>
 				<!-- for User  -->
@@ -42,6 +41,12 @@
 				
 			</div>
 		</div>
-	{% endfor %}															
+	{% endfor %}
+
 	</div> 
+
+
+	{% if user.is_authenticated and user.is_superuser %}
+	<a  style="background-color: green; padding: 5px; margin-left: 40px; color: white;" href="{% url 'colleges:add' %}">Add College</a>
+{% endif %}
 {% endblock %}
